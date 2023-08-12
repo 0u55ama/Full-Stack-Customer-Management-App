@@ -1,0 +1,23 @@
+{
+  "AWSEBDockerrunVersion": 2,
+  "containerDefinitions": [
+    {
+      "name": "osmspringboot-api",
+      "image": "0u55ama/osmspringboot-api:10.08.2023.16.11.41",
+      "essential": true,
+      "memory": 512,
+      "portMappings": [
+        {
+          "hostPort": 80,
+          "containerPort": 8080
+        }
+      ],
+      "environment": [
+        {
+          "name": "SPRING_DATASOURCE_URL",
+          "value":"jdbc:postgresql://awseb-e-2daiqmgytx-stack-awsebrdsdatabase-o01awdcrvzua.cmr9g0lsp4p5.eu-west-3.rds.amazonaws.com:5432/customer"
+        }
+      ]
+    }
+  ]
+}
