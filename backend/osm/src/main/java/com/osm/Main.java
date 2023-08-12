@@ -32,7 +32,6 @@ public class Main {
             String lastName = name.lastName();
             Gender[] genders = Gender.values();
             Gender gender = genders[random.nextInt(genders.length)];
-//TEST
             Customer customer = new Customer(
                     firstName + " " + lastName,
                     firstName.toLowerCase() + "." + lastName.toLowerCase() + "@mail.com",
