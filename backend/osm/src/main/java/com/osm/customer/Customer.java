@@ -47,21 +47,12 @@ public class Customer {
     private Gender gender;
 
 
-<<<<<<< HEAD
-=======
-
-
-
->>>>>>> 6064df5c7148c0dcde8ee1efc67ba55922431e65
     public Customer() {
 
     }
 
 
-<<<<<<< HEAD
-=======
 
->>>>>>> 6064df5c7148c0dcde8ee1efc67ba55922431e65
     public Customer(String name, String email, Integer age, Gender gender) {
         this.name = name;
         this.email = email;
@@ -79,10 +70,7 @@ public class Customer {
 
     public Long getId() {
         return id;
-<<<<<<< HEAD
 
-=======
->>>>>>> 6064df5c7148c0dcde8ee1efc67ba55922431e65
     }
 
     public void setId(Long id) {

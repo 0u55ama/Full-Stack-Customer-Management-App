@@ -27,7 +27,7 @@ jobs:
           --health-retries 5
     defaults:
       run:
-        working-directory: ./backend/osm
+        working-directory: backend/osm
 
     steps:
       - uses: actions/checkout@v3
