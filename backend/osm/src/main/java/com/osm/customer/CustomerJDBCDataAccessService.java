@@ -41,13 +41,14 @@ public class CustomerJDBCDataAccessService implements CustomerDAO {
     @Override
     public void insertCustomer(Customer customer) {
         var sql = """
-        INSERT INTO customer(name, email, age, gender)
-        VALUES (?, ?, ?, ?)
+        INSERT INTO customer(name, email, password, age, gender)
+        VALUES (?, ?, ?, ?, ?)
         """;
         int result = jdbcTemplate.update(
                 sql,
                 customer.getName(),
                 customer.getEmail(),
+                customer.getPassword(),
                 customer.getAge(),
                 customer.getGender().toString()  // Convert enum value to string
         );
@@ -109,28 +110,18 @@ public class CustomerJDBCDataAccessService implements CustomerDAO {
             int emailResult = jdbcTemplate.update(sql, update.getEmail(), update.getId());
             System.out.println("updated customer email result = " + emailResult);
         }
-/*
-        if (update.getGender() != null) {
-            String sql = "UPDATE customer SET gender = ? WHERE id = ?";
 
-            // Convert the enum value to lowercase before passing it to the query
-            String lowercaseGender = update.getGender().toString().toLowerCase();
+    }
 
-            int genderResult = jdbcTemplate.update(sql, lowercaseGender, update.getId());
-            System.out.println("updated customer gender result = " + genderResult);
-        }
-
-        if (update.getGender() != null) {
-            String sql = "UPDATE customer SET gender = ? WHERE id = ?";
-            int genderResult = jdbcTemplate.update(
-                    sql,
-                    update.getGender().toString(), // Use enum's string representation
-                    update.getId()
-            );
-            System.out.println("updated customer gender result = " + genderResult);
-        }
-
- */
-
+    @Override
+    public Optional<Customer> selectUserByEmail(String email) {
+        var sql = """ 
+                SELECT * FROM customer
+                WHERE email = ?
+                """;
+        return jdbcTemplate
+                .query(sql, customerRowMapper, email)
+                .stream()
+                .findFirst();
     }
 }

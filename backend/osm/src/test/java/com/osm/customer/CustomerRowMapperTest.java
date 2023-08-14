@@ -37,7 +37,7 @@ class CustomerRowMapperTest {
                 1L,
                 "lzzy",
                 "lzzy@mail.com",
-                19,
+                "azerty.123..", 19,
                 Gender.FEMALE
 
         );

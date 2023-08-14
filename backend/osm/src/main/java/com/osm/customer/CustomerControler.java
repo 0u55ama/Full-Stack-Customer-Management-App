@@ -1,5 +1,8 @@
 package com.osm.customer;
 
+import com.osm.jwt.JWTUtil;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -9,9 +12,11 @@ import java.util.List;
 public class CustomerControler {
 
     private final CustomerService customerService;
+    private final JWTUtil jwtUtil;
 
-    public CustomerControler(CustomerService customerService) {
+    public CustomerControler(CustomerService customerService, JWTUtil jwtUtil) {
         this.customerService = customerService;
+        this.jwtUtil = jwtUtil;
     }
 
     @GetMapping
@@ -26,8 +31,12 @@ public class CustomerControler {
     }
 
     @PostMapping
-    public void registerCustomer(@RequestBody CustomerRegistrationRequest request){
+    public ResponseEntity<?> registerCustomer(@RequestBody CustomerRegistrationRequest request){
         customerService.addCustomer(request);
+        String jwtToken = jwtUtil.issueToken(request.email(), "ROLE_USER");
+        return ResponseEntity.ok()
+                .header(HttpHeaders.AUTHORIZATION, jwtToken)
+                .build();
     }
 
     @DeleteMapping("{customerId}")

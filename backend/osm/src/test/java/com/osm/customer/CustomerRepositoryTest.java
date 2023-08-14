@@ -37,7 +37,7 @@ class CustomerRepositoryTest  extends AbstractTestcontainers {
         Customer customer = new Customer(
                 name,
                 email,
-                20,
+                "azerty.123..", 20,
                 Gender.FEMALE
         );
         underTest.save(customer);
@@ -71,7 +71,7 @@ class CustomerRepositoryTest  extends AbstractTestcontainers {
         Customer customer = new Customer(
                 name,
                 email,
-                20,
+                "azerty.123..", 20,
                 Gender.FEMALE
         );
         underTest.save(customer);

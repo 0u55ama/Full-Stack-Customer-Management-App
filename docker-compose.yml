@@ -27,6 +27,20 @@ services:
       - db
     restart: unless-stopped
 
+  osm-react:
+    container_name: osm-react
+    image: 0u55ama/osm-react
+    build:
+      context: frontend/react
+      args:
+        api_base_url: http://localhost:8088
+    ports:
+      - "3000:5173"
+    depends_on:
+      - springboot-example-081
+
+    restart: unless-stopped
+
 networks:
   db:
     driver: bridge

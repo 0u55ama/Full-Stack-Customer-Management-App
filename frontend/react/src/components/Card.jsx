@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import {
     Box,
     Heading,
@@ -10,22 +10,30 @@ import {
     Center,
     useColorModeValue,
     HStack,
+    useDisclosure,
+    AlertDialog,
+    AlertDialogOverlay,
+    AlertDialogContent,
+    AlertDialogHeader,
+    AlertDialogBody,
+    AlertDialogFooter, Button,
 } from '@chakra-ui/react'
+
 import { BsArrowUpRight, BsHeartFill, BsHeart } from 'react-icons/bs'
+import {deleteCustomer} from "../services/client.js";
+import {errorNotification, successNotification} from "../services/Notification.js";
+import UpdateCustomerDrawer from "./UpdateCustomerDrawer.jsx";
 
-<<<<<<< HEAD
-export default function CardWithImage({id, name, email, age}) {
 
-    const [liked, setLiked] = useState(false)
+export default function CardWithImage({id, name, email, age, gender, RANDOM, fetchCustomers}) {
 
-=======
-export default function CardWithImage({id, name, email, age, gender, RANDOM}) {
+    const { isOpen, onOpen, onClose } = useDisclosure()
+    const cancelRef = useRef()
 
     const [liked, setLiked] = useState(false)
 
     const SEX = gender === "MALE" ? "men" : "women"
 
->>>>>>> 6064df5c7148c0dcde8ee1efc67ba55922431e65
     return (
         <Center py={6}>
             <Box
@@ -40,14 +48,8 @@ export default function CardWithImage({id, name, email, age, gender, RANDOM}) {
                 boxShadow={useColorModeValue('6px 6px 0 black', '6px 6px 0 cyan')}>
                 <Box h={'200px'} borderBottom={'1px'} borderColor="black">
                     <Img
-                        src={
-<<<<<<< HEAD
-                            'https://images.unsplash.com/photo-1542435503-956c469947f6?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=774&q=80'
-                        }
-=======
-                            `https://randomuser.me/api/portraits/${SEX}/${RANDOM}.jpg`
-                    }
->>>>>>> 6064df5c7148c0dcde8ee1efc67ba55922431e65
+                        src=
+                        {`https://randomuser.me/api/portraits/${SEX}/${RANDOM}.jpg`}
                         roundedTop={'sm'}
                         objectFit="cover"
                         h="full"
@@ -62,7 +64,7 @@ export default function CardWithImage({id, name, email, age, gender, RANDOM}) {
                         </Text>
                     </Box>
                     <Heading color={'black'} fontSize={'2xl'} noOfLines={1}>
-                        ID : {id} - {name}
+                        ID : {RANDOM+1} - {name}
                     </Heading>
                     <Text color={'gray.500'} noOfLines={2}>
                         {email}
@@ -70,17 +72,74 @@ export default function CardWithImage({id, name, email, age, gender, RANDOM}) {
                 </Box>
                 <HStack borderTop={'1px'} color="black">
                     <Flex
+                        onClick={onOpen}
                         p={4}
                         alignItems="center"
                         justifyContent={'space-between'}
                         roundedBottom={'sm'}
                         cursor={'pointer'}
-                        w="full">
+                        color={"red.400"}
+                        w="full"
+                        _hover={{
+                            transform: 'transformY(-2px)',
+                            boxShadow: 'dark-lg'
+                        }}>
                         <Text fontSize={'md'} fontWeight={'semibold'}>
-                            Explore Profile
+                            Delete
                         </Text>
                         <BsArrowUpRight />
                     </Flex>
+
+                    <AlertDialog
+                        isOpen={isOpen}
+                        leastDestructiveRef={cancelRef}
+                        onClose={onClose}
+                    >
+                        <AlertDialogOverlay>
+                            <AlertDialogContent>
+                                <AlertDialogHeader fontSize='lg' fontWeight='bold'>
+                                    Delete Customer
+                                </AlertDialogHeader>
+
+                                <AlertDialogBody>
+                                    Are you sure you want to delete {name}? You can't undo this action afterwards.
+                                </AlertDialogBody>
+
+                                <AlertDialogFooter>
+                                    <Button ref={cancelRef} onClick={onClose}>
+                                        Cancel
+                                    </Button>
+                                    <Button colorScheme='red' onClick={() => {
+
+                                        deleteCustomer(id).then(res => {
+                                            console.log(res)
+                                            successNotification(
+                                                "Customer deleted",
+                                                `${name} was successfully deleted`
+                                            )
+                                            fetchCustomers();
+                                        }).catch(err => {
+                                                console.log(err)
+                                                errorNotification(
+                                                    err.code,
+                                                    err.response.data.message
+                                                )
+                                            }).finally( () => {
+                                                onClose()
+                                        })
+
+                                    }} ml={3}>
+                                        Delete
+                                    </Button>
+                                </AlertDialogFooter>
+                            </AlertDialogContent>
+                        </AlertDialogOverlay>
+                    </AlertDialog>
+
+                    <UpdateCustomerDrawer initialValues = {{ name, email, age }}
+                                          customerId = {id}
+                                          fetchCustomers={fetchCustomers}
+                    />
 
                 </HStack>
             </Box>

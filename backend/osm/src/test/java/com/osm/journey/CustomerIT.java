@@ -46,7 +46,7 @@ public class CustomerIT {
         CustomerRegistrationRequest request = new CustomerRegistrationRequest(
                 name,
                 email,
-                age,
+                "azerty.123..", age,
                 gender
         );
         // send a post request
@@ -75,7 +75,7 @@ public class CustomerIT {
         Customer expectedCustomer = new Customer(
                 name,
                 email,
-                age,
+                "azerty.123..", age,
                 gender
         );
         assertThat(allCustomers).
@@ -117,7 +117,7 @@ public class CustomerIT {
         CustomerRegistrationRequest request = new CustomerRegistrationRequest(
                 name,
                 email,
-                age,
+                "azerty.123..", age,
                 gender
         );
         // send a post request
@@ -183,7 +183,7 @@ public class CustomerIT {
         CustomerRegistrationRequest request = new CustomerRegistrationRequest(
                 name,
                 email,
-                age,
+                "azerty.123..", age,
                 gender
         );
 
@@ -246,7 +246,7 @@ public class CustomerIT {
                 id,
                 updatedName,
                 email,
-                age,
+                "azerty.123..", age,
                 gender
         );
         assertThat(updatedCustomer).isEqualTo(expected);
