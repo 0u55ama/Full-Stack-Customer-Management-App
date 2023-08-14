@@ -8,25 +8,31 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class CustomerService {
 
     private final CustomerDAO customerDAO;
     private final PasswordEncoder passwordEncoder;
+    private final CustomerDTOMapper customerDTOMapper;
 
-    public CustomerService(@Qualifier("jdbc") CustomerDAO customerDAO, PasswordEncoder passwordEncoder) {
+    public CustomerService(@Qualifier("jdbc") CustomerDAO customerDAO, PasswordEncoder passwordEncoder, CustomerDTOMapper customerDTOMapper) {
         this.customerDAO = customerDAO;
         this.passwordEncoder = passwordEncoder;
+        this.customerDTOMapper = customerDTOMapper;
     }
 
-    public List<Customer> getAllCustomers(){
-        return customerDAO.selectAllCustomers();
+    public List<CustomerDTO> getAllCustomers(){
+        return customerDAO.selectAllCustomers()
+                .stream()
+                .map(customerDTOMapper ).collect(Collectors.toList());
     }
 
-    public Customer getCustomer(Integer id){
-        return customerDAO.selectCustomersById(id).
-                orElseThrow(
+    public CustomerDTO getCustomer(Integer id){
+        return customerDAO.selectCustomersById(id)
+                .map(customerDTOMapper)
+                .orElseThrow(
                 () -> new ResourceNotFoundException("Customer with id [%s] not found".formatted(id))
         );
     }
@@ -56,7 +62,10 @@ public class CustomerService {
     }
 
     public void updateCustomer(Integer customerId, CustomerUpdateRequest updateRequest){
-        Customer customer = getCustomer(customerId);
+        Customer customer = customerDAO.selectCustomersById(customerId)
+                .orElseThrow(
+                        () -> new ResourceNotFoundException("Customer with id [%s] not found".formatted(customerId))
+                );
         boolean changes = false;
 
         if (updateRequest.name() != null && !updateRequest.name().equals(customer.getName())){
