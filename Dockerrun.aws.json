@@ -16,7 +16,7 @@
 
     {
       "name": "osmspringboot-api",
-      "image": "0u55ama/osmspringboot-api:12.08.2023.12.52.11",
+      "image": "0u55ama/osmspringboot-api:14.08.2023.17.56.07",
       "essential": true,
       "memory": 512,
       "portMappings": [
