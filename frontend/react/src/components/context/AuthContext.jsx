@@ -6,6 +6,7 @@ const AuthContext = createContext({});
 
 const AuthProvider = ({ children }) => {
 
+
     const [customer, setCustomer] = useState(null);
 
     const setCustomerFromToken = () => {
