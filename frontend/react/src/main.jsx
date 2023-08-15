@@ -4,6 +4,7 @@ import {createBrowserRouter, RouterProvider} from "react-router-dom";
 import { ChakraProvider } from '@chakra-ui/react'
 import { createStandaloneToast } from '@chakra-ui/react'
 import Login from "./components/login/Login.jsx";
+import Signup from "./components/signup/Signup.jsx";
 import AuthProvider from "./components/context/AuthContext.jsx";
 import ProtectedRoute from "./components/shared/ProtectedRoute.jsx";
 import App from './App.jsx'
@@ -15,6 +16,10 @@ const router = createBrowserRouter([
     {
         path:"/",
         element: <Login/>
+    },
+    {
+        path:"/signup",
+        element: <Signup/>
     },
     {
         path: "dashboard",
