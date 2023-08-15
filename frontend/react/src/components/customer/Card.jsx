@@ -20,8 +20,8 @@ import {
 } from '@chakra-ui/react'
 
 import { BsArrowUpRight, BsHeartFill, BsHeart } from 'react-icons/bs'
-import {deleteCustomer} from "../services/client.js";
-import {errorNotification, successNotification} from "../services/Notification.js";
+import {deleteCustomer} from "../../services/client.js";
+import {errorNotification, successNotification} from "../../services/Notification.js";
 import UpdateCustomerDrawer from "./UpdateCustomerDrawer.jsx";
 
 

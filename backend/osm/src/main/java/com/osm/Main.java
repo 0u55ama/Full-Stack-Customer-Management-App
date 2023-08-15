@@ -42,13 +42,10 @@ public class Main {
                     passwordEncoder.encode("azerty.123.."),
                     random.nextInt(16,99),
                     gender
-
-
-
             );
 
             customerRepository.save(customer);
-            System.out.println(email);
+            System.out.println(email + "  test");
 
 
         };
