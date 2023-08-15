@@ -61,6 +61,11 @@ const CreateCustomerForm = ({ fetchCustomers }) => {
                         .max(100, 'Must be at most 100 years of age')
                         .required('Required'),
 
+                    passwird: Yup.string()
+                        .min(8, 'Must be at least 16 years of age')
+                        .max(15, 'Must be 20 characters or less')
+                        .required('Required'),
+
                     gender: Yup.string()
                         .oneOf(
                             ['MALE', 'FEMALE'],
@@ -114,6 +119,13 @@ const CreateCustomerForm = ({ fetchCustomers }) => {
                                 name="age"
                                 type="number"
                                 placeholder="22"
+                            />
+
+                            <MyTextInput
+                                label="Password"
+                                name="password"
+                                type="password"
+                                placeholder="********"
                             />
 
                             <MySelect label="Gender" name="gender">

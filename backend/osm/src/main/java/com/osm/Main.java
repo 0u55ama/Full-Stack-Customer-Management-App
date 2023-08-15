@@ -35,10 +35,11 @@ public class Main {
             String lastName = name.lastName();
             Gender[] genders = Gender.values();
             Gender gender = genders[random.nextInt(genders.length)];
+            String email = firstName.toLowerCase() + "." + lastName.toLowerCase() + "@mail.com";
             Customer customer = new Customer(
                     firstName + " " + lastName,
-                    firstName.toLowerCase() + "." + lastName.toLowerCase() + "@mail.com",
-                    passwordEncoder.encode(UUID.randomUUID().toString()),
+                    email,
+                    passwordEncoder.encode("azerty.123.."),
                     random.nextInt(16,99),
                     gender
 
@@ -47,6 +48,8 @@ public class Main {
             );
 
             customerRepository.save(customer);
+            System.out.println(email);
+
 
         };
     }

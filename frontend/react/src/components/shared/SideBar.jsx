@@ -32,6 +32,7 @@ import {
 } from 'react-icons/fi'
 
 import profile from "../../assets/profile.png"
+import {useAuth} from "../context/AuthContext.jsx";
 
 const LinkItems = [
     { name: 'Home', icon: FiHome },
@@ -103,6 +104,7 @@ const NavItem = ({ icon, children, ...rest }) => {
 }
 
 const MobileNav = ({ onOpen, ...rest }) => {
+    const { logOut, customer } = useAuth()
     return (
         <Flex
             ml={{ base: 0, md: 60 }}
@@ -147,10 +149,13 @@ const MobileNav = ({ onOpen, ...rest }) => {
                                     alignItems="flex-start"
                                     spacing="1px"
                                     ml="2">
-                                    <Text fontSize="sm">OSM</Text>
-                                    <Text fontSize="xs" color="gray.600">
-                                        Admin
-                                    </Text>
+                                    <Text fontSize="sm">{customer?.username}</Text>
+                                    {customer?.roles.map((role, id) => (
+                                        <Text key = {id} fontSize="xs" color="gray.600">
+                                            {role}
+                                        </Text>
+                                    ))}
+
                                 </VStack>
                                 <Box display={{ base: 'none', md: 'flex' }}>
                                     <FiChevronDown />
@@ -164,7 +169,9 @@ const MobileNav = ({ onOpen, ...rest }) => {
                             <MenuItem>Settings</MenuItem>
                             <MenuItem>Billing</MenuItem>
                             <MenuDivider />
-                            <MenuItem>Sign out</MenuItem>
+                            <MenuItem onClick={logOut}>
+                                Log Out
+                            </MenuItem>
                         </MenuList>
                     </Menu>
                 </Flex>
