@@ -17,7 +17,7 @@ management:
 
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/customer
+    url: jdbc:postgresql://awseb-e-aqgw8ekzpp-stack-awsebrdsdatabase-q8gtlahybk6z.cmr9g0lsp4p5.eu-west-3.rds.amazonaws.com:5432/ebdb
     username: osm
     password: azerty.123..
   jpa:
