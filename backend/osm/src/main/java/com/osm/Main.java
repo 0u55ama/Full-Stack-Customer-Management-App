@@ -37,6 +37,7 @@ public class Main {
             Gender gender = genders[random.nextInt(genders.length)];
             String email = firstName.toLowerCase() + "." + lastName.toLowerCase() + "@mail.com";
             Customer customer = new Customer(
+
                     firstName + " " + lastName,
                     email,
                     passwordEncoder.encode("azerty.123.."),
