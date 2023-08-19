@@ -1,0 +1,61 @@
+<div class="flex" style="height: 100vh">
+  <div class="col-6 m-3 flex flex-column justify-content-center">
+    <div class="m-auto">
+      <div class="text-center">
+        <h1>Sign in to your account</h1>
+      </div>
+      <p-message
+        *ngIf="errorMsg"
+        severity="error" [text]=" errorMsg "
+        styleClass="mb-3"
+      ></p-message>
+
+      <div class="field">
+        <label for="email">Email</label>
+        <input
+          [(ngModel)]="authenticationRequest.username"
+          id="email"
+          pInputText
+          placeholder="oussama@mail.com"
+          type="email"
+          class="w-full"
+        >
+      </div>
+
+      <div class="field">
+        <label for="password">Password</label>
+        <input
+          [(ngModel)]="authenticationRequest.password"
+          id="password"
+          pInputText
+          placeholder="********"
+          type="password"
+          class="w-full"
+        >
+      </div>
+
+      <button
+        pButton
+        label="Login"
+        class="w-full"
+        (click)="login()"
+      >
+      </button>
+
+      <button
+        pButton
+        label="Don't have and account!? Signup now"
+        class="w-full p-button-link text-left pl-0 mt-2 "
+        (click)="register()"
+      ></button>
+    </div>
+  </div>
+  <div class="col-6 flex flex-column justify-content-center align-items-center right-container" >
+    <h1>
+      <a href="https://oussamaaitlamaalam.com" target="_blank">Portfolio</a>
+    </h1>
+    <img
+      class="background p-6 pt-0"
+      src="">
+  </div>
+</div>

@@ -1,0 +1,35 @@
+<div class="flex flex-column align-items-end border-bottom-1 border-gray-200 pt-3 pb-3">
+  <div class="flex flex-row  align-items-center">
+    <button
+    pButton
+    pRipple
+    type="button"
+    icon="pi pi-bell"
+    class="p-button-rounded p-badge-secondary p-button-text mr-5">
+
+    </button>
+    <p-avatar
+      image="https://pbs.twimg.com/media/FWbWpuwWIAEGBeX?format=jpg&name=medium"
+      size="normal"
+      shape="circle"
+      class="mr-2"
+    >
+    </p-avatar>
+    <div>
+      <p class="text-base mb-0 mt-1 text-gray-700 ">{{username}}</p>
+      <p class="text-sm mb-1 mt-0 text-gray-400 ">{{userRole}}</p>
+    </div>
+    <div>
+      <button
+      pButton
+      pRipple
+      type="button"
+      icon="pi pi-angle-down"
+      class="p-button-secondary p-button-text"
+      (click)="menu.toggle($event)"
+      >
+      </button>
+      <p-menu #menu [popup]="true" [model]="items"></p-menu>
+    </div>
+  </div>
+</div>
