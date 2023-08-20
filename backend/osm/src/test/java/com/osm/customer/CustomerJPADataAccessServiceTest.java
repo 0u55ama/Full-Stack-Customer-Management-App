@@ -47,7 +47,7 @@ class CustomerJPADataAccessServiceTest {
         assertThat(expected).isEqualTo(customers);
         ArgumentCaptor<Pageable> pageArgumentCaptor = ArgumentCaptor.forClass(Pageable.class);
         verify(customerRepository).findAll(pageArgumentCaptor.capture());
-        assertThat(pageArgumentCaptor.getValue()).isEqualTo(Pageable.ofSize(1000));
+        assertThat(pageArgumentCaptor.getValue()).isEqualTo(Pageable.ofSize(100));
     }
 
     @Test
