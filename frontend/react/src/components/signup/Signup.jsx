@@ -42,13 +42,7 @@ const Signup = () => {
                         Porfolio
                     </Link>
                 </Text>
-                <Image
-                    alt={'Login Image'}
-                    objectFit={'scale-down'}
-                    src={
-                        'https://user-images.githubusercontent.com/40702606/215539167-d7006790-b880-4929-83fb-c43fa74f429e.png'
-                    }
-                />
+
             </Flex>
         </Stack>
     );

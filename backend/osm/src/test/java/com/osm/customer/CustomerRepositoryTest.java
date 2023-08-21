@@ -10,8 +10,10 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Import;
 
+import java.util.Optional;
 import java.util.UUID;
 
+import static org.assertj.core.api.Assertions.as;
 import static org.assertj.core.api.Assertions.assertThat;
 
 
@@ -104,5 +106,35 @@ class CustomerRepositoryTest  extends AbstractTestcontainers {
         // Then
         assertThat(actual).isFalse();
 
+    }
+
+    @Test
+    void canUpdateProfileImageId() {
+        // Given
+        String name = FAKER.name().fullName();
+        String email = "email";
+        Customer customer = new Customer(
+                name,
+                email,
+                "azerty.123..",
+                20,
+                Gender.FEMALE
+        );
+        underTest.save(customer);
+
+        int id = Math.toIntExact(underTest.findAll()
+                .stream()
+                .filter(c -> c.getEmail().equals(email))
+                .map(Customer::getId)
+                .findFirst()
+                .orElseThrow());
+        // When
+        underTest.updateProfileImageId("45454", id);
+
+        // Then
+        Optional<Customer> customerOptional = underTest.findById(id);
+        assertThat(customerOptional)
+                .isPresent()
+                .hasValueSatisfying(c -> assertThat(c.getProfileImageId()).isEqualTo("45454"));
     }
 }

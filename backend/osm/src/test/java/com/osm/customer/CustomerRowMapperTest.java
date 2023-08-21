@@ -23,6 +23,10 @@ class CustomerRowMapperTest {
         when(resultSet.getString("name")).thenReturn("lzzy");
         when(resultSet.getString("email")).thenReturn("lzzy@mail.com");
         when(resultSet.getString("gender")).thenReturn("FEMALE"); // Set the gender value here
+        when(resultSet.getString("password")).thenReturn("azerty.123..");
+        when(resultSet.getString("profile_image_id")).thenReturn("45454");
+
+
 
 
 
@@ -37,8 +41,10 @@ class CustomerRowMapperTest {
                 1L,
                 "lzzy",
                 "lzzy@mail.com",
-                "azerty.123..", 19,
-                Gender.FEMALE
+                "azerty.123..",
+                19,
+                Gender.FEMALE,
+                "45454"
 
         );
         assertThat(actual).isEqualTo(expected);

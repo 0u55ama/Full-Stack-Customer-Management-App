@@ -139,4 +139,18 @@ class CustomerJPADataAccessServiceTest {
         verify(customerRepository)
                 .save(customer);
     }
+
+    @Test
+    void canUpdateProfileImageId() {
+        // Given
+        String profileImageId = "45454";
+        Integer customerId = 2;
+        // When
+
+        underTest.updateCustomerProfileImageId(profileImageId, customerId);
+
+        // Then
+
+        verify(customerRepository).updateProfileImageId(profileImageId, customerId);
+    }
 }

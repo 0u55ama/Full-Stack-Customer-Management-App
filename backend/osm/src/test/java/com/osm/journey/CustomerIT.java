@@ -8,10 +8,16 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
 import org.springframework.http.MediaType;
+import org.springframework.http.client.MultipartBodyBuilder;
 import org.springframework.test.web.reactive.server.WebTestClient;
+import org.springframework.web.reactive.function.BodyInserters;
+import org.testcontainers.shaded.com.google.common.io.Files;
 import reactor.core.publisher.Mono;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Random;
 import java.util.UUID;
@@ -23,7 +29,7 @@ import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 @SpringBootTest(webEnvironment = RANDOM_PORT)
 public class CustomerIT {
 
-    @Autowired 
+    @Autowired
     private WebTestClient webTestClient;
     private static final Random RANDOM = new Random();
     private static final String CUSTOMER_PATH = "/api/v1/customers";
@@ -92,22 +98,23 @@ public class CustomerIT {
                 gender,
                 age,
                 List.of("ROLE_USER"),
-                email
+                email,
+                null
         );
 
         assertThat(allCustomers).contains(expectedCustomer);
 
         //get customer by id
-         webTestClient.get()
-                 .uri(CUSTOMER_PATH +"/{id}", id)
-                 .accept(MediaType.APPLICATION_JSON)
-                 .header(AUTHORIZATION, String.format("Bearer %s",jwtToken))
-                 .exchange()
-                 .expectStatus()
-                 .isOk()
-                 .expectBody(new ParameterizedTypeReference<CustomerDTO>() {
+        webTestClient.get()
+                .uri(CUSTOMER_PATH +"/{id}", id)
+                .accept(MediaType.APPLICATION_JSON)
+                .header(AUTHORIZATION, String.format("Bearer %s",jwtToken))
+                .exchange()
+                .expectStatus()
+                .isOk()
+                .expectBody(new ParameterizedTypeReference<CustomerDTO>() {
                 })
-                 .isEqualTo(expectedCustomer);
+                .isEqualTo(expectedCustomer);
     }
 
     @Test
@@ -290,8 +297,113 @@ public class CustomerIT {
                 gender,
                 age,
                 List.of("ROLE_USER"),
-                email
+                email,
+                null
         );
         assertThat(updatedCustomer).isEqualTo(expected);
+    }
+
+    @Test
+    void canUploadAndDownloadProfilePictures() throws IOException {
+        // create a registration request
+        Faker faker = new Faker();
+
+        Name fakeName = faker.name();
+        String name = fakeName.lastName();
+        String email = fakeName.lastName()+ "_" +UUID.randomUUID() + "@mail.com";
+        int age = RANDOM.nextInt(1,100);
+
+        Gender[] genders = Gender.values();
+        Gender gender = genders[RANDOM.nextInt(genders.length)];
+
+        CustomerRegistrationRequest request = new CustomerRegistrationRequest(
+                name,
+                email,
+                "azerty.123..", age,
+                gender
+        );
+
+        // send a post request
+        String jwtToken = webTestClient.post()
+                .uri(CUSTOMER_PATH)
+                .accept(MediaType.APPLICATION_JSON)
+                .body(Mono.just(request), CustomerRegistrationRequest.class)
+                .exchange()
+                .expectStatus()
+                .isOk()
+                .returnResult(Void.class)
+                .getResponseHeaders()
+                .get(AUTHORIZATION)
+                .get(0);
+
+        // get all customer
+        List<CustomerDTO> allCustomers = webTestClient.get()
+                .uri(CUSTOMER_PATH)
+                .accept(MediaType.APPLICATION_JSON)
+                .header(AUTHORIZATION, String.format("Bearer %s", jwtToken))
+                .exchange()
+                .expectStatus()
+                .isOk()
+                .expectBodyList(new ParameterizedTypeReference<CustomerDTO>() {
+                })
+                .returnResult()
+                .getResponseBody();
+
+        CustomerDTO customerDTO = allCustomers.stream()
+                .filter(customer -> customer.email().equals(email))
+                .findFirst()
+                .orElseThrow();
+
+        assertThat(customerDTO.profileImageId()).isNullOrEmpty();
+
+        Resource image = new ClassPathResource("%s.jpg".formatted(gender.name().toLowerCase()));
+
+        MultipartBodyBuilder bodyBuilder = new MultipartBodyBuilder();
+        bodyBuilder.part("file", image);
+
+        // send a post request
+        webTestClient.post()
+                .uri(CUSTOMER_PATH+"/{customerId}/profile-image",customerDTO.id())
+                .header(AUTHORIZATION, String.format("Bearer %s", jwtToken))
+                .body(BodyInserters.fromMultipartData(bodyBuilder.build()))
+                .exchange()
+                .expectStatus()
+                .isOk();
+
+        //then the profile image id should be populated
+
+        //get customer by id
+        String profileImageId = webTestClient.get()
+                .uri(CUSTOMER_PATH + "/{id}", customerDTO.id())
+                .accept(MediaType.APPLICATION_JSON)
+                .header(AUTHORIZATION, String.format("Bearer %s", jwtToken))
+                .exchange()
+                .expectStatus()
+                .isOk()
+                .expectBody(CustomerDTO.class)
+                .returnResult()
+                .getResponseBody()
+                .profileImageId();
+
+        assertThat(profileImageId).isNotBlank();
+
+
+        // send a post request
+//                .header(AUTHORIZATION, String.format("Bearer %s", jwtToken))
+
+        byte[] downloadedImage = webTestClient.get()
+                .uri(CUSTOMER_PATH + "/{customerId}/profile-image", customerDTO.id())
+                .accept(MediaType.APPLICATION_JSON)
+                .exchange()
+                .expectStatus()
+                .isOk()
+                .expectBody(byte[].class)
+                .returnResult()
+                .getResponseBody();
+
+        byte[] actual = Files.toByteArray(image.getFile());
+        assertThat(actual).isEqualTo(downloadedImage);
+
+
     }
 }
