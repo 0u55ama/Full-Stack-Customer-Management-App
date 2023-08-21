@@ -20,7 +20,7 @@ import {
 } from '@chakra-ui/react'
 
 import { BsArrowUpRight, BsHeartFill, BsHeart } from 'react-icons/bs'
-import {deleteCustomer} from "../../services/client.js";
+import {customerProfilePictureUrl, deleteCustomer} from "../../services/client.js";
 import {errorNotification, successNotification} from "../../services/Notification.js";
 import UpdateCustomerDrawer from "./UpdateCustomerDrawer.jsx";
 
@@ -49,7 +49,7 @@ export default function CardWithImage({id, name, email, age, gender, RANDOM, fet
                 <Box h={'200px'} borderBottom={'1px'} borderColor="black">
                     <Img
                         src=
-                        {`https://randomuser.me/api/portraits/${SEX}/${RANDOM}.jpg`}
+                        {customerProfilePictureUrl(id)}
                         roundedTop={'sm'}
                         objectFit="cover"
                         h="full"
