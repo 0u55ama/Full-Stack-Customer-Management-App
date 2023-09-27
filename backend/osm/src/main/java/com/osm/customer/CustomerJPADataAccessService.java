@@ -1,4 +1,4 @@
-package com.osm.customer;
+=package com.osm.customer;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -38,14 +38,10 @@ public class CustomerJPADataAccessService implements CustomerDAO{
         return customerRepository.existsCustomerByEmail(email);
     }
 
-
-
     @Override
     public void deleteCustomerById(Integer customerId) {
         customerRepository.deleteById(customerId);
     }
-
-
 
     @Override
     public boolean existsPersonWithId(Integer id) {
@@ -65,8 +61,7 @@ public class CustomerJPADataAccessService implements CustomerDAO{
     @Override
     public void updateCustomerProfileImageId(String profileImageId, Integer customerId) {
         customerRepository.updateProfileImageId(profileImageId, customerId);
-
+        
     }
-
 
 }
