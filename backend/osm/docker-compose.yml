@@ -4,7 +4,7 @@ services:
     image: postgres:15.3
     environment:
       POSTGRES_USER: osm
-      POSTGRES_PASSWORD: azerty.123..
+      POSTGRES_PASSWORD: PASSWORD
       PGDATA: /data/postgres
     volumes:
       - db:/data/postgres
